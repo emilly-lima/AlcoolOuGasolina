@@ -1,11 +1,20 @@
 package com.example.exemplosimplesdecompose.data
 
 import java.io.Serializable
+import java.text.SimpleDateFormat
+import java.util.*
 
 data class GasStation(
-    var name: String,
+    val name: String,
+    val alcohol: Double,
+    val gasoline: Double,
+    val date: String,
     val coord: Coordinates
 ): Serializable {
-    // Construtor secundário com coordenadas de Fortaleza
-    constructor(nome: String) : this(nome, Coordinates(41.40338, 2.17403))
-}
+    constructor(name: String) : this(
+        name = name,
+        alcohol = 0.0,
+        gasoline = 0.0,
+        date = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(Date()),
+        Coordinates(41.40338, 2.17403))
+    }

@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     composable("mainalcgas") { AlcoolGasolinaPreco(navController,check) }
                     composable("listaDePostos/{posto}") { backStackEntry ->
                         val posto = backStackEntry.arguments?.getString("posto") ?: ""
-                        ListofGasStations(navController, posto)
+                        ListofGasStations(navController)
                     }
 
                 }
