@@ -95,9 +95,8 @@ fun Posto(navController: NavHostController, nome: String) {
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(onClick = {
-//                    val novaLista = getListOfGasStation(context).filter { it.name != posto.name }
-//                    updateList(context, novaLista)
-//                    navController.popBackStack()
+                    deleteGasStation(context, posto)
+                    navController.popBackStack()
                 }) {
                     Text("Excluir")
                 }
