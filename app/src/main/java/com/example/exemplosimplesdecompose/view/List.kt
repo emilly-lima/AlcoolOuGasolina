@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.exemplosimplesdecompose.data.Coordinates
@@ -16,23 +17,19 @@ import com.example.exemplosimplesdecompose.data.GasStation
 import org.json.JSONArray
 import org.json.JSONObject
 import androidx.core.content.edit
+import com.example.exemplosimplesdecompose.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListofGasStations(navController: NavHostController) {
     val context = LocalContext.current
 
-    //Não precisa salvar sempre que listar
-    //val newGas = GasStation(posto)
-    //addGasStation(context, newGas)
-
-    // Lista atualizada
     val postosComp = getListOfGasStation(context)
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Lista de Postos") }
+                title = { Text(stringResource(id = R.string.lista_de_postos)) }
             )
         }
     ) { innerPadding ->
@@ -52,10 +49,10 @@ fun ListofGasStations(navController: NavHostController) {
                         .padding(10.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text("Nome: ${item.name}")
-                        Text("Gasolina: R$ %.2f".format(item.gasoline))
-                        Text("Álcool: R$ %.2f".format(item.alcohol))
-                        Text("Data: ${item.date}")
+                        Text("${stringResource(id = R.string.nome)}: ${item.name}")
+                        Text("${stringResource(id = R.string.gasolina)}: R$ %.2f".format(item.gasoline))
+                        Text("${stringResource(id = R.string.alcool)}: R$ %.2f".format(item.alcohol))
+                        Text("${stringResource(id = R.string.data)}: ${item.date}")
                     }
                 }
             }
@@ -84,19 +81,10 @@ fun jsonToGasStation(json: JSONObject?): GasStation {
     return GasStation(name, alcohol, gasoline, date, Coordinates(lat, lgt))
 }
 
-//fun stringToJson_Safe(jsonString: String): JSONObject? {
-//    return try {
-//        JSONObject(jsonString)
-//    } catch (e: Exception) {
-//        null
-//    }
-//}
-
 fun saveGasStationJSON(context: Context, gasStation: GasStation) {
     val sharedFileName = "allGasStationsJSON"
     val sp = context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
     sp.edit {
-
         val existingList = getListOfGasStation(context).toMutableList()
         existingList.add(gasStation)
 
@@ -128,10 +116,6 @@ fun getListOfGasStation(context: Context): List<GasStation> {
     return list
 }
 
-//fun addGasStation(context: Context, gasStation: GasStation) {
-//    saveGasStationJSON(context, gasStation)
-//}
-
 fun updateList(context: Context, lista: List<GasStation>) {
     val sharedFileName = "allGasStationsJSON"
     val sp = context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
@@ -142,9 +126,8 @@ fun updateList(context: Context, lista: List<GasStation>) {
     }
 }
 
-fun deleteGasStation(context: Context, gasStation: GasStation){
+fun deleteGasStation(context: Context, gasStation: GasStation) {
     val currentList = getListOfGasStation(context).toMutableStateList()
     currentList.removeAll { it.name == gasStation.name && it.date == gasStation.date }
     updateList(context, currentList)
 }
-

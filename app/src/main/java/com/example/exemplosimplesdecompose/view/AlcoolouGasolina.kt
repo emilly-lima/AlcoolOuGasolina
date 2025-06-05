@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,9 +52,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.core.content.edit
+import com.example.exemplosimplesdecompose.R
 
 @Composable
-fun AlcoolGasolinaPreco(navController: NavHostController,check:Boolean) {
+fun AlcoolGasolinaPreco(navController: NavHostController, check: Boolean) {
     val context = LocalContext.current
 
     var alcool by remember { mutableStateOf("") }
@@ -75,15 +77,12 @@ fun AlcoolGasolinaPreco(navController: NavHostController,check:Boolean) {
     fun checkAndRequestPermission(onGranted: () -> Unit) {
         when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                // Permissão já concedida
                 onGranted()
             }
             else -> {
                 if (permissionDeniedOnce) {
-                    // Permissão negada antes, mostramos explicação
                     showRationale = true
                 } else {
-                    // Primeira vez pedindo permissão
                     locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                 }
             }
@@ -101,10 +100,8 @@ fun AlcoolGasolinaPreco(navController: NavHostController,check:Boolean) {
             }
     }
 
-    // A surface container using the 'background' color from the theme
     Surface(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         Column(
@@ -114,49 +111,48 @@ fun AlcoolGasolinaPreco(navController: NavHostController,check:Boolean) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Campo de texto para entrada do preço
             OutlinedTextField(
                 value = alcool,
-                onValueChange = { alcool = it }, // Atualiza o estado
-                label = { Text("Preço do Álcool (R$)") },
-                modifier = Modifier.fillMaxWidth(), // Preenche a largura disponível
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number) // Configuração do teclado
-            )
-            // Campo de texto para preço da Gasolina
-            OutlinedTextField(
-                value = gasolina,
-                onValueChange = { gasolina = it },
-                label = { Text("Preço da Gasolina (R$)") },
+                onValueChange = { alcool = it },
+                label = { Text(stringResource(id = R.string.preco_alcool)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
-            // Campo de texto para preço da Gasolina
+            OutlinedTextField(
+                value = gasolina,
+                onValueChange = { gasolina = it },
+                label = { Text(stringResource(id = R.string.preco_gasolina)) },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
             OutlinedTextField(
                 value = nomeDoPosto,
                 onValueChange = { nomeDoPosto = it },
-                label = { Text("Nome do Posto (Opcional))") },
+                label = { Text(stringResource(id = R.string.nome_posto_opcional)) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-                horizontalArrangement = Arrangement.Start) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text(
-                    text = "75%",
+                    text = stringResource(id = R.string.percentual_75),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(top = 16.dp)
                 )
                 Switch(
                     modifier = Modifier.semantics { contentDescription = "Escolha o percentual" },
                     checked = checkedState,
-                    onCheckedChange = { checkedState = it
-                         saveConfig(context,checkedState)
-                                      },
+                    onCheckedChange = {
+                        checkedState = it
+                        saveConfig(context, checkedState)
+                    },
                     thumbContent = {
                         if (checkedState) {
-                            // Icon isn't focusable, no need for content description
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = null,
@@ -166,51 +162,58 @@ fun AlcoolGasolinaPreco(navController: NavHostController,check:Boolean) {
                     }
                 )
             }
-            // Botão de cálculo
-            Button(
-                onClick = {
 
-                },
+            Button(
+                onClick = {},
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Calcular")
+                Text(stringResource(id = R.string.calcular))
             }
 
-            // Texto do resultado
             Text(
-                text = "Vamos Calcular?",
+                text = stringResource(id = R.string.vamos_calcular),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 16.dp)
             )
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-                horizontalArrangement = Arrangement.End) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
                 FloatingActionButton(
                     onClick = {
                         if (alcool.isBlank()) {
-                            Toast.makeText(context, "Informe o preço do Álcool.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.informar_preco_alcool),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@FloatingActionButton
                         }
                         if (gasolina.isBlank()) {
-                            Toast.makeText(context, "Informe o preço da Gasolina.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.informar_preco_gasolina),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@FloatingActionButton
                         }
                         checkAndRequestPermission {
-                            // Aqui você chama o getLastKnownLocation e salva o posto
                             getLastKnownLocation(context) { location ->
                                 if (location != null) {
-                                    val lat = location.latitude
-                                    val lng = location.longitude
-
+                                    val postoDesconhecido = context.getString(R.string.posto_desconhecido)
+                                    val nomeFinal = nomeDoPosto.ifEmpty { postoDesconhecido }
                                     val gasStation = GasStation(
-                                        name = nomeDoPosto.ifEmpty { "Posto Desconhecido" },
+                                        name = nomeFinal,
                                         alcohol = alcool.toDoubleOrNull() ?: 0.0,
                                         gasoline = gasolina.toDoubleOrNull() ?: 0.0,
-                                        date = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(
-                                            Date()
-                                        ),
-                                        coord = Coordinates(lat, lng)
+                                        date = SimpleDateFormat(
+                                            "dd-MM-yyyy HH:mm",
+                                            Locale.getDefault()
+                                        ).format(Date()),
+                                        coord = Coordinates(location.latitude, location.longitude)
                                     )
                                     saveGasStationJSON(context, gasStation)
                                     navController.navigate("ListaDePostos/${gasStation.name}")
@@ -219,18 +222,20 @@ fun AlcoolGasolinaPreco(navController: NavHostController,check:Boolean) {
                         }
                     }
                 ) {
-                    Icon(Icons.Filled.Add, "Inserir Posto")
+                    Icon(Icons.Filled.Add, context.getString(R.string.inserir_posto))
                 }
             }
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-                horizontalArrangement = Arrangement.End) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
                 FloatingActionButton(
-                    onClick = {
-                        navController.navigate("ListaDePostos/$nomeDoPosto")},
+                    onClick = { navController.navigate("ListaDePostos/${nomeDoPosto}") },
                 ) {
-                    Icon(Icons.Filled.List, "Ver lista de Posto")
+                    Icon(Icons.Filled.List, context.getString(R.string.ver_lista_posto))
                 }
             }
         }
@@ -239,32 +244,30 @@ fun AlcoolGasolinaPreco(navController: NavHostController,check:Boolean) {
     if (showRationale) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { showRationale = false },
-            title = { Text("Permissão necessária") },
-            text = {
-                Text("O app precisa da sua localização para salvar o posto com coordenadas. Por favor, conceda a permissão.")
-            },
+            title = { Text(stringResource(id = R.string.permissao_necessaria)) },
+            text = { Text(stringResource(id = R.string.permissao_texto)) },
             confirmButton = {
                 Button(onClick = {
                     showRationale = false
                     locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                 }) {
-                    Text("Permitir")
+                    Text(stringResource(id = R.string.permissao_permitir))
                 }
             },
             dismissButton = {
                 Button(onClick = { showRationale = false }) {
-                    Text("Cancelar")
+                    Text(stringResource(id = R.string.permissao_cancelar))
                 }
             }
         )
     }
-
 }
-fun saveConfig(context: Context, switch_state:Boolean){
-    val sharedFileName="config_Alc_ou_Gas"
-    val sp: SharedPreferences = context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
+
+fun saveConfig(context: Context, switch_state: Boolean) {
+    val sharedFileName = "config_Alc_ou_Gas"
+    val sp: SharedPreferences =
+        context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
     sp.edit {
         putBoolean("is_75_checked", switch_state)
     }
 }
-

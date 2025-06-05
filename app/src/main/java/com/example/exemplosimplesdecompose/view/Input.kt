@@ -17,12 +17,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.exemplosimplesdecompose.R
 
 @Composable
-fun InputView(navController: NavHostController) { //Recebe o elemento que permite realizar a navegação
+fun InputView(navController: NavHostController) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     Column(
         modifier = Modifier
@@ -34,15 +36,15 @@ fun InputView(navController: NavHostController) { //Recebe o elemento que permit
         TextField(
             value = text,
             onValueChange = { text = it },
-            label = { Text("Digite algo") },
+            label = { Text(stringResource(id = R.string.digite_algo)) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        val nomeDoPosto=text.text
+        val nomeDoPosto = text.text
         Button(
-            onClick = { navController.navigate("listaDePostos/$nomeDoPosto")}
+            onClick = { navController.navigate("listaDePostos/$nomeDoPosto") }
         ) {
-            Text("Ir para a próxima tela")
+            Text(stringResource(id = R.string.ir_para_proxima_tela))
         }
     }
 }

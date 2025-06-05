@@ -1,3 +1,44 @@
 <resources>
     <string name="app_name">Alcool ou Gasolina?</string>
+    <string name="preco_alcool">Preço do Álcool (R$)</string>
+    <string name="preco_gasolina">Preço da Gasolina (R$)</string>
+    <string name="nome_posto_opcional">Nome do Posto (Opcional)</string>
+    <string name="percentual_75">75%</string>
+    <string name="calcular">Calcular</string>
+    <string name="vamos_calcular">Vamos Calcular?</string>
+    <string name="informar_preco_alcool">Informe o preço do Álcool.</string>
+    <string name="informar_preco_gasolina">Informe o preço da Gasolina.</string>
+    <string name="posto_desconhecido">Posto Desconhecido</string>
+    <string name="inserir_posto">Inserir Posto</string>
+    <string name="ver_lista_posto">Ver lista de Posto</string>
+
+    <string name="permissao_necessaria">Permissão necessária</string>
+    <string name="permissao_texto">O app precisa da sua localização para salvar o posto com coordenadas. Por favor, conceda a permissão.</string>
+    <string name="permissao_permitir">Permitir</string>
+    <string name="permissao_cancelar">Cancelar</string>
+
+    <string name="posto_nao_encontrado">Posto não encontrado</string>
+    <string name="nome_posto">Nome do Posto</string>
+    <string name="ver_no_mapa">Ver no Mapa</string>
+    <string name="salvar">Salvar</string>
+    <string name="excluir">Excluir</string>
+    <string name="confirmacao">Confirmação</string>
+    <string name="deseja_excluir">Tem certeza que deseja excluir este posto?</string>
+    <string name="posto_excluido_sucesso">Posto excluído com sucesso</string>
+    <string name="sim">Sim</string>
+    <string name="cancelar">Cancelar</string>
+
+    <string name="digite_algo">Digite algo</string>
+    <string name="ir_para_proxima_tela">Ir para a próxima tela</string>
+
+    <string name="lista_de_postos">Lista de Postos</string>
+    <string name="nome">Nome</string>
+    <string name="gasolina">Gasolina</string>
+    <string name="alcool">Álcool</string>
+    <string name="data">Data</string>
+
+    <string name="bem_vindo_ao_app">Bem-vindos ao Alcool ou Gasolina!</string>
+    <string name="descricao_imagem_boas_vindas">Imagem de boas-vindas</string>
+
+
 </resources>
