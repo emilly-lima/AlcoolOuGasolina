@@ -1,31 +1,17 @@
 package com.example.exemplosimplesdecompose.view
 
 import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavHostController
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.exemplosimplesdecompose.data.GasStation
 import androidx.core.net.toUri
+
+import kotlinx.coroutines.launch
 
 @Composable
 fun Posto(navController: NavHostController, nome: String) {
@@ -36,17 +22,24 @@ fun Posto(navController: NavHostController, nome: String) {
     var gasolina by remember { mutableStateOf(posto?.gasoline?.toString() ?: "") }
     var nomePosto by remember { mutableStateOf(posto?.name ?: "") }
 
+    var showDialog by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope() // <- necessário para Snackbar
+
     if (posto == null) {
         Text("Posto não encontrado")
         return
     }
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(Modifier.padding(16.dp)) {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            // TextFields e botões de ação
             OutlinedTextField(
                 value = nomePosto,
                 onValueChange = { nomePosto = it },
@@ -95,11 +88,39 @@ fun Posto(navController: NavHostController, nome: String) {
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(onClick = {
-                    deleteGasStation(context, posto)
-                    navController.popBackStack()
+                    showDialog = true
                 }) {
                     Text("Excluir")
                 }
+            }
+
+            // Dialog de confirmação
+            if (showDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text("Confirmação") },
+                    text = { Text("Tem certeza que deseja excluir este posto?") },
+                    confirmButton = {
+                        Button(onClick = {
+                            deleteGasStation(context, posto)
+                            showDialog = false
+
+                            coroutineScope.launch {
+                                snackbarHostState.showSnackbar("Posto excluído com sucesso")
+                                navController.popBackStack()
+                            }
+                        }) {
+                            Text("Sim")
+                        }
+                    },
+                    dismissButton = {
+                        Button(onClick = {
+                            showDialog = false
+                        }) {
+                            Text("Cancelar")
+                        }
+                    }
+                )
             }
         }
     }
