@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -139,5 +140,11 @@ fun updateList(context: Context, lista: List<GasStation>) {
     sp.edit {
         putString("gasStations", jsonArray.toString())
     }
+}
+
+fun deleteGasStation(context: Context, gasStation: GasStation){
+    val currentList = getListOfGasStation(context).toMutableStateList()
+    currentList.removeAll { it.name == gasStation.name && it.date == gasStation.date }
+    updateList(context, currentList)
 }
 
