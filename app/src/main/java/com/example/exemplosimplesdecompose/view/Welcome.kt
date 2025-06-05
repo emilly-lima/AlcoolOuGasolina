@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.exemplosimplesdecompose.R
 
-@Preview
 @Composable
 fun Welcome(navController: NavHostController) { //Recebe o elemento que permite realizar a navegação
     Column(
