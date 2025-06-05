@@ -6,13 +6,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.exemplosimplesdecompose.ui.theme.ExemploSimplesDeComposeTheme
 import com.example.exemplosimplesdecompose.view.AlcoolGasolinaPreco
+import com.example.exemplosimplesdecompose.view.Posto
 import com.example.exemplosimplesdecompose.view.ListofGasStations
 import com.example.exemplosimplesdecompose.view.Welcome
 
@@ -33,6 +33,10 @@ class MainActivity : ComponentActivity() {
                         val posto = backStackEntry.arguments?.getString("posto") ?: ""
                         ListofGasStations(navController)
                     }
+                    composable("Posto/{nome}") { backStackEntry ->
+                        val nome = backStackEntry.arguments?.getString("nome") ?: ""
+                        Posto(navController, nome)
+                    }
 
                 }
             }
@@ -42,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
     fun loadConfig(context: Context):Boolean{
         val sharedFileName="config_Alc_ou_Gas"
-        var sp: SharedPreferences = context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
+        val sp: SharedPreferences = context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
         var is_75_checked=false
         if(sp!=null) {
             is_75_checked = sp.getBoolean("is_75_checked", false)

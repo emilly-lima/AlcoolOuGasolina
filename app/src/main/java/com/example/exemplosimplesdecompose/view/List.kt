@@ -1,7 +1,6 @@
 package com.example.exemplosimplesdecompose.view
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,7 +14,6 @@ import com.example.exemplosimplesdecompose.data.Coordinates
 import com.example.exemplosimplesdecompose.data.GasStation
 import org.json.JSONArray
 import org.json.JSONObject
-import androidx.core.net.toUri
 import androidx.core.content.edit
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,11 +44,7 @@ fun ListofGasStations(navController: NavHostController) {
             items(postosComp) { item ->
                 Card(
                     onClick = {
-                        val gmmIntentUri = "geo:${item.coord.lat},${item.coord.lgt}".toUri()
-                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri).apply {
-                            setPackage("com.google.android.apps.maps")
-                        }
-                        context.startActivity(mapIntent)
+                        navController.navigate("Posto/${item.name}")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -136,3 +130,14 @@ fun getListOfGasStation(context: Context): List<GasStation> {
 //fun addGasStation(context: Context, gasStation: GasStation) {
 //    saveGasStationJSON(context, gasStation)
 //}
+
+fun updateList(context: Context, lista: List<GasStation>) {
+    val sharedFileName = "allGasStationsJSON"
+    val sp = context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
+    val jsonArray = JSONArray()
+    lista.forEach { jsonArray.put(gasStationToJson(it)) }
+    sp.edit {
+        putString("gasStations", jsonArray.toString())
+    }
+}
+
