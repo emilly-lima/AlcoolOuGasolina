@@ -23,7 +23,7 @@ fun Welcome(navController: NavHostController) {
         Text(text = stringResource(id = R.string.bem_vindo_ao_app))
         Spacer(modifier = Modifier.height(16.dp))
         Image(
-            painter = painterResource(id = R.drawable.welcome),
+            painter = painterResource(id = R.drawable.petrol),
             contentDescription = stringResource(id = R.string.descricao_imagem_boas_vindas),
             modifier = Modifier
                 .size(128.dp)

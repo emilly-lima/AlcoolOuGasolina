@@ -53,6 +53,9 @@ import java.util.Date
 import java.util.Locale
 import androidx.core.content.edit
 import com.example.exemplosimplesdecompose.R
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+
 
 @Composable
 fun AlcoolGasolinaPreco(navController: NavHostController, check: Boolean) {
@@ -65,6 +68,7 @@ fun AlcoolGasolinaPreco(navController: NavHostController, check: Boolean) {
 
     var showRationale by remember { mutableStateOf(false) }
     var permissionDeniedOnce by remember { mutableStateOf(false) }
+    var resultado by remember { mutableStateOf(context.getString(R.string.vamos_calcular)) }
 
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -111,6 +115,18 @@ fun AlcoolGasolinaPreco(navController: NavHostController, check: Boolean) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            Text(
+                text = stringResource(id = R.string.app_name),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, bottom = 8.dp),
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold
+            )
+
             OutlinedTextField(
                 value = alcool,
                 onValueChange = { alcool = it },
@@ -164,14 +180,28 @@ fun AlcoolGasolinaPreco(navController: NavHostController, check: Boolean) {
             }
 
             Button(
-                onClick = {},
+                onClick = {
+                    val alcoolValor = alcool.toFloatOrNull()
+                    val gasolinaValor = gasolina.toFloatOrNull()
+                    val fator = if (checkedState) 0.75 else 0.70
+
+                    resultado = if (alcoolValor == null || gasolinaValor == null || gasolinaValor == 0f) {
+                        context.getString(R.string.valores_invalidos)
+                    } else {
+                        if (alcoolValor / gasolinaValor <= fator) {
+                            context.getString(R.string.melhor_usar_alcool)
+                        } else {
+                            context.getString(R.string.melhor_usar_gasolina)
+                        }
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(id = R.string.calcular))
             }
 
             Text(
-                text = stringResource(id = R.string.vamos_calcular),
+                text = resultado,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 16.dp)
             )

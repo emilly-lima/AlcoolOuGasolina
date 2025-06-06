@@ -40,5 +40,9 @@
     <string name="bem_vindo_ao_app">Bem-vindos ao Alcool ou Gasolina!</string>
     <string name="descricao_imagem_boas_vindas">Imagem de boas-vindas</string>
 
+    <string name="melhor_usar_alcool">Melhor usar Álcool</string>
+    <string name="melhor_usar_gasolina">Melhor usar Gasolina</string>
+    <string name="valores_invalidos">Insira valores válidos para os preços</string>
+
 
 </resources>
