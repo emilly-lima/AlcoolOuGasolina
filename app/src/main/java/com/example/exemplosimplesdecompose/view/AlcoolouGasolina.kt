@@ -294,11 +294,11 @@ fun AlcoolGasolinaPreco(navController: NavHostController, check: Boolean) {
     }
 }
 
-fun saveConfig(context: Context, switch_state: Boolean) {
+fun saveConfig(context: Context, switchState: Boolean) {
     val sharedFileName = "config_Alc_ou_Gas"
     val sp: SharedPreferences =
         context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
     sp.edit {
-        putBoolean("is_75_checked", switch_state)
+        putBoolean("is_75_checked", switchState)
     }
 }
