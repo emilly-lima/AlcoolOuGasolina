@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                    // composable("input") { InputView(navController) }
                     composable("mainalcgas") { AlcoolGasolinaPreco(navController,check) }
                     composable("listaDePostos/{posto}") { backStackEntry ->
-                        val posto = backStackEntry.arguments?.getString("posto") ?: ""
+                        backStackEntry.arguments?.getString("posto") ?: ""
                         ListofGasStations(navController)
                     }
                     composable("Posto/{nome}") { backStackEntry ->
@@ -46,12 +46,12 @@ class MainActivity : ComponentActivity() {
 
     fun loadConfig(context: Context):Boolean{
         val sharedFileName="config_Alc_ou_Gas"
-        val sp: SharedPreferences = context.getSharedPreferences(sharedFileName, Context.MODE_PRIVATE)
-        var is_75_checked=false
-        if(sp!=null) {
-            is_75_checked = sp.getBoolean("is_75_checked", false)
+        val sp: SharedPreferences = context.getSharedPreferences(sharedFileName, MODE_PRIVATE)
+        var is75Checked=false
+        if(true) {
+            is75Checked = sp.getBoolean("is_75_checked", false)
         }
-        return is_75_checked
+        return is75Checked
     }
 }
 
