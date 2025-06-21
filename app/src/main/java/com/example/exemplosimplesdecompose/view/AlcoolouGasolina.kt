@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.List
@@ -41,20 +42,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.navigation.NavHostController
+import com.example.exemplosimplesdecompose.R
 import com.example.exemplosimplesdecompose.data.Coordinates
 import com.example.exemplosimplesdecompose.data.GasStation
 import com.google.android.gms.location.LocationServices
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import androidx.core.content.edit
-import com.example.exemplosimplesdecompose.R
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 
 
 @Composable
@@ -265,7 +266,7 @@ fun AlcoolGasolinaPreco(navController: NavHostController, check: Boolean) {
                 FloatingActionButton(
                     onClick = { navController.navigate("ListaDePostos/${nomeDoPosto}") },
                 ) {
-                    Icon(Icons.Filled.List, context.getString(R.string.ver_lista_posto))
+                    Icon(Icons.AutoMirrored.Filled.List, context.getString(R.string.ver_lista_posto))
                 }
             }
         }

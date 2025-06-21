@@ -10,10 +10,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.exemplosimplesdecompose.ui.theme.ExemploSimplesDeComposeTheme
+import com.example.exemplosimplesdecompose.ui.theme.AppTheme
 import com.example.exemplosimplesdecompose.view.AlcoolGasolinaPreco
-import com.example.exemplosimplesdecompose.view.Posto
 import com.example.exemplosimplesdecompose.view.ListofGasStations
+import com.example.exemplosimplesdecompose.view.Posto
 import com.example.exemplosimplesdecompose.view.Welcome
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         var check= false
         check=loadConfig(this)
         setContent {
-            ExemploSimplesDeComposeTheme {
+            AppTheme {
                 val navController: NavHostController = rememberNavController()
                 NavHost(navController = navController, startDestination = "welcome") {
                     composable("welcome") { Welcome(navController) }
