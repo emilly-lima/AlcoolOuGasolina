@@ -1,18 +1,15 @@
 package com.example.exemplosimplesdecompose.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.Typography
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 
 private val lightScheme = lightColorScheme(
@@ -255,21 +252,34 @@ val unspecified_scheme = ColorFamily(
     Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
 )
 
+enum class ContrastLevel {
+    Default,
+    Medium,
+    High
+}
+
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    content: @Composable() () -> Unit
+    contrastLevel: ContrastLevel = ContrastLevel.Default,
+    content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
-        darkTheme -> darkScheme
-        else -> lightScheme
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> highContrastDarkColorScheme
+            ContrastLevel.Medium -> mediumContrastDarkColorScheme
+            ContrastLevel.Default -> darkScheme
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> highContrastLightColorScheme
+            ContrastLevel.Medium -> mediumContrastLightColorScheme
+            ContrastLevel.Default -> lightScheme
+        }
     }
 
     MaterialTheme(
@@ -277,5 +287,390 @@ fun AppTheme(
         typography = AppTypography,
         content = content
     )
+}
+
+@Composable
+fun getThemeColors(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): androidx.compose.material3.ColorScheme {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> highContrastDarkColorScheme
+            ContrastLevel.Medium -> mediumContrastDarkColorScheme
+            ContrastLevel.Default -> darkScheme
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> highContrastLightColorScheme
+            ContrastLevel.Medium -> mediumContrastLightColorScheme
+            ContrastLevel.Default -> lightScheme
+        }
+    }
+}
+
+@Composable
+fun getCurrentColors(): androidx.compose.material3.ColorScheme {
+    return MaterialTheme.colorScheme
+}
+
+@Composable
+fun getAppBackground(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> backgroundDarkHighContrast
+            ContrastLevel.Medium -> backgroundDarkMediumContrast
+            ContrastLevel.Default -> backgroundDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> backgroundLightHighContrast
+            ContrastLevel.Medium -> backgroundLightMediumContrast
+            ContrastLevel.Default -> backgroundLight
+        }
+    }
+}
+
+@Composable
+fun getAppPrimary(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> primaryDarkHighContrast
+            ContrastLevel.Medium -> primaryDarkMediumContrast
+            ContrastLevel.Default -> primaryDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> primaryLightHighContrast
+            ContrastLevel.Medium -> primaryLightMediumContrast
+            ContrastLevel.Default -> primaryLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnPrimary(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onPrimaryDarkHighContrast
+            ContrastLevel.Medium -> onPrimaryDarkMediumContrast
+            ContrastLevel.Default -> onPrimaryDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onPrimaryLightHighContrast
+            ContrastLevel.Medium -> onPrimaryLightMediumContrast
+            ContrastLevel.Default -> onPrimaryLight
+        }
+    }
+}
+
+@Composable
+fun getAppSecondary(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> secondaryDarkHighContrast
+            ContrastLevel.Medium -> secondaryDarkMediumContrast
+            ContrastLevel.Default -> secondaryDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> secondaryLightHighContrast
+            ContrastLevel.Medium -> secondaryLightMediumContrast
+            ContrastLevel.Default -> secondaryLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnSecondary(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onSecondaryDarkHighContrast
+            ContrastLevel.Medium -> onSecondaryDarkMediumContrast
+            ContrastLevel.Default -> onSecondaryDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onSecondaryLightHighContrast
+            ContrastLevel.Medium -> onSecondaryLightMediumContrast
+            ContrastLevel.Default -> onSecondaryLight
+        }
+    }
+}
+
+@Composable
+fun getAppError(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> errorDarkHighContrast
+            ContrastLevel.Medium -> errorDarkMediumContrast
+            ContrastLevel.Default -> errorDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> errorLightHighContrast
+            ContrastLevel.Medium -> errorLightMediumContrast
+            ContrastLevel.Default -> errorLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnSurface(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onSurfaceDarkHighContrast
+            ContrastLevel.Medium -> onSurfaceDarkMediumContrast
+            ContrastLevel.Default -> onSurfaceDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onSurfaceLightHighContrast
+            ContrastLevel.Medium -> onSurfaceLightMediumContrast
+            ContrastLevel.Default -> onSurfaceLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnSurfaceVariant(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onSurfaceVariantDarkHighContrast
+            ContrastLevel.Medium -> onSurfaceVariantDarkMediumContrast
+            ContrastLevel.Default -> onSurfaceVariantDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onSurfaceVariantLightHighContrast
+            ContrastLevel.Medium -> onSurfaceVariantLightMediumContrast
+            ContrastLevel.Default -> onSurfaceVariantLight
+        }
+    }
+}
+
+@Composable
+fun getAppOutline(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> outlineDarkHighContrast
+            ContrastLevel.Medium -> outlineDarkMediumContrast
+            ContrastLevel.Default -> outlineDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> outlineLightHighContrast
+            ContrastLevel.Medium -> outlineLightMediumContrast
+            ContrastLevel.Default -> outlineLight
+        }
+    }
+}
+
+@Composable
+fun getAppPrimaryContainer(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> primaryContainerDarkHighContrast
+            ContrastLevel.Medium -> primaryContainerDarkMediumContrast
+            ContrastLevel.Default -> primaryContainerDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> primaryContainerLightHighContrast
+            ContrastLevel.Medium -> primaryContainerLightMediumContrast
+            ContrastLevel.Default -> primaryContainerLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnPrimaryContainer(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onPrimaryContainerDarkHighContrast
+            ContrastLevel.Medium -> onPrimaryContainerDarkMediumContrast
+            ContrastLevel.Default -> onPrimaryContainerDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onPrimaryContainerLightHighContrast
+            ContrastLevel.Medium -> onPrimaryContainerLightMediumContrast
+            ContrastLevel.Default -> onPrimaryContainerLight
+        }
+    }
+}
+
+@Composable
+fun getAppSecondaryContainer(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> secondaryContainerDarkHighContrast
+            ContrastLevel.Medium -> secondaryContainerDarkMediumContrast
+            ContrastLevel.Default -> secondaryContainerDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> secondaryContainerLightHighContrast
+            ContrastLevel.Medium -> secondaryContainerLightMediumContrast
+            ContrastLevel.Default -> secondaryContainerLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnSecondaryContainer(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onSecondaryContainerDarkHighContrast
+            ContrastLevel.Medium -> onSecondaryContainerDarkMediumContrast
+            ContrastLevel.Default -> onSecondaryContainerDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onSecondaryContainerLightHighContrast
+            ContrastLevel.Medium -> onSecondaryContainerLightMediumContrast
+            ContrastLevel.Default -> onSecondaryContainerLight
+        }
+    }
+}
+
+@Composable
+fun getAppSurface(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> surfaceDarkHighContrast
+            ContrastLevel.Medium -> surfaceDarkMediumContrast
+            ContrastLevel.Default -> surfaceDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> surfaceLightHighContrast
+            ContrastLevel.Medium -> surfaceLightMediumContrast
+            ContrastLevel.Default -> surfaceLight
+        }
+    }
+}
+
+@Composable
+fun getAppSurfaceContainer(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> surfaceContainerDarkHighContrast
+            ContrastLevel.Medium -> surfaceContainerDarkMediumContrast
+            ContrastLevel.Default -> surfaceContainerDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> surfaceContainerLightHighContrast
+            ContrastLevel.Medium -> surfaceContainerLightMediumContrast
+            ContrastLevel.Default -> surfaceContainerLight
+        }
+    }
+}
+
+@Composable
+fun getAppSurfaceVariant(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> surfaceVariantDarkHighContrast
+            ContrastLevel.Medium -> surfaceVariantDarkMediumContrast
+            ContrastLevel.Default -> surfaceVariantDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> surfaceVariantLightHighContrast
+            ContrastLevel.Medium -> surfaceVariantLightMediumContrast
+            ContrastLevel.Default -> surfaceVariantLight
+        }
+    }
+}
+
+@Composable
+fun getAppErrorContainer(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> errorContainerDarkHighContrast
+            ContrastLevel.Medium -> errorContainerDarkMediumContrast
+            ContrastLevel.Default -> errorContainerDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> errorContainerLightHighContrast
+            ContrastLevel.Medium -> errorContainerLightMediumContrast
+            ContrastLevel.Default -> errorContainerLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnErrorContainer(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onErrorContainerDarkHighContrast
+            ContrastLevel.Medium -> onErrorContainerDarkMediumContrast
+            ContrastLevel.Default -> onErrorContainerDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onErrorContainerLightHighContrast
+            ContrastLevel.Medium -> onErrorContainerLightMediumContrast
+            ContrastLevel.Default -> onErrorContainerLight
+        }
+    }
+}
+
+@Composable
+fun getAppOnError(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    contrastLevel: ContrastLevel = ContrastLevel.Default
+): Color {
+    return when {
+        darkTheme -> when (contrastLevel) {
+            ContrastLevel.High -> onErrorDarkHighContrast
+            ContrastLevel.Medium -> onErrorDarkMediumContrast
+            ContrastLevel.Default -> onErrorDark
+        }
+        else -> when (contrastLevel) {
+            ContrastLevel.High -> onErrorLightHighContrast
+            ContrastLevel.Medium -> onErrorLightMediumContrast
+            ContrastLevel.Default -> onErrorLight
+        }
+    }
 }
 

@@ -10,20 +10,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.navigation.NavHostController
 import com.example.exemplosimplesdecompose.R
 import com.example.exemplosimplesdecompose.data.Coordinates
 import com.example.exemplosimplesdecompose.data.GasStation
+import com.example.exemplosimplesdecompose.ui.theme.*
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -31,36 +36,73 @@ import org.json.JSONObject
 @Composable
 fun ListofGasStations(navController: NavHostController) {
     val context = LocalContext.current
-
     val postosComp = getListOfGasStation(context)
+    val currentContrastLevel = loadContrastConfig(context)
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(id = R.string.lista_de_postos)) }
-            )
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            items(postosComp) { item ->
-                Card(
-                    onClick = {
-                        navController.navigate("Posto/${item.name}")
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = getAppBackground(contrastLevel = currentContrastLevel)
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { 
+                        Text(
+                            text = stringResource(id = R.string.lista_de_postos),
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = getAppOnPrimaryContainer(contrastLevel = currentContrastLevel)
+                        )
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("${stringResource(id = R.string.nome)}: ${item.name}")
-                        Text("${stringResource(id = R.string.gasolina)}: R$ %.2f".format(item.gasoline))
-                        Text("${stringResource(id = R.string.alcool)}: R$ %.2f".format(item.alcohol))
-                        Text("${stringResource(id = R.string.data)}: ${item.date}")
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = getAppPrimaryContainer(contrastLevel = currentContrastLevel),
+                        titleContentColor = getAppOnPrimaryContainer(contrastLevel = currentContrastLevel)
+                    )
+                )
+            }
+        ) { innerPadding ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentPadding = PaddingValues(16.dp)
+            ) {
+                items(postosComp) { item ->
+                    Card(
+                        onClick = {
+                            navController.navigate("Posto/${item.name}")
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        colors = androidx.compose.material3.CardDefaults.cardColors(
+                            containerColor = getAppSurfaceContainer(contrastLevel = currentContrastLevel),
+                            contentColor = getAppOnSurface(contrastLevel = currentContrastLevel)
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "${stringResource(id = R.string.nome)}: ${item.name}",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = getAppOnSurface(contrastLevel = currentContrastLevel)
+                            )
+                            Text(
+                                text = "${stringResource(id = R.string.gasolina)}: R$ %.2f".format(item.gasoline),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = getAppOnSurfaceVariant(contrastLevel = currentContrastLevel)
+                            )
+                            Text(
+                                text = "${stringResource(id = R.string.alcool)}: R$ %.2f".format(item.alcohol),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = getAppOnSurfaceVariant(contrastLevel = currentContrastLevel)
+                            )
+                            Text(
+                                text = "${stringResource(id = R.string.data)}: ${item.date}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = getAppOnSurfaceVariant(contrastLevel = currentContrastLevel)
+                            )
+                        }
                     }
                 }
             }
