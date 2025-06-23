@@ -1,5 +1,7 @@
 package com.example.exemplosimplesdecompose.view
 
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,7 +48,7 @@ fun ListofGasStations(navController: NavHostController) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { 
+                    title = {
                         Text(
                             text = stringResource(id = R.string.lista_de_postos),
                             style = MaterialTheme.typography.headlineMedium,
@@ -68,13 +70,20 @@ fun ListofGasStations(navController: NavHostController) {
                 contentPadding = PaddingValues(16.dp)
             ) {
                 items(postosComp) { item ->
+                    val descricaoAcessivel = "${item.name}, gasolina R$ %.2f, álcool R$ %.2f, data: %s".format(
+                        item.gasoline, item.alcohol, item.date
+                    )
+
                     Card(
                         onClick = {
                             navController.navigate("Posto/${item.name}")
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 4.dp),
+                            .padding(vertical = 4.dp)
+                            .semantics {
+                                contentDescription = descricaoAcessivel
+                            },
                         colors = androidx.compose.material3.CardDefaults.cardColors(
                             containerColor = getAppSurfaceContainer(contrastLevel = currentContrastLevel),
                             contentColor = getAppOnSurface(contrastLevel = currentContrastLevel)
